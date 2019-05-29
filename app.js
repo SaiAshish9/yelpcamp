@@ -306,18 +306,11 @@ else{
 
 //middleware
 
-function isLoggedIn(req,res,next){
-  if(req.isAuthenticated()){
-    return next()
-  }
-  req.flash("error","You Need To Be Logged In To Do That!")
-  res.redirect("/login")
-}
 
 function checkcmnt(req,res,next){
   if(req.isAuthenticated())
     {
-      Comment.findById(req.params.id,(err,found)=>{
+      Comment.findById(req.params.comment_id,(err,found)=>{
         if(err){
           req.flash("error","Campground not found")
           res.redirect("back")
@@ -363,7 +356,16 @@ next()  }else{    req.flash("error","You don't have permission to do that!")
 
 }
 
+function isLoggedIn(req,res,next){
+  if(req.isAuthenticated()){
+    return next()
+  }
+  req.flash("error","You Need To Be Logged In To Do That!")
+  res.redirect("/login")
+}
 
-app.listen(process.env.PORT||3000,process.env.IP,()=>{
-  console.log("server started");
-})
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+app.listen(port);
